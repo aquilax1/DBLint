@@ -1,0 +1,134 @@
+﻿<Window x:Class="DBLint.DBLintGui.AddConnectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:dataacces="clr-namespace:DBLint.DataAccess;assembly=DataAccess"
+        xmlns:local="clr-namespace:DBLint.DBLintGui"
+        Title="Add Connection"
+        Height="Auto"
+        SizeToContent="Height"
+        Width="305">
+    <Window.Resources>
+
+        <ObjectDataProvider x:Key="authenticationMethodsDataProvider"
+                            MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dataacces:AuthenticationMethod" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="dbmsDataProvider"
+                            MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dataacces:DBMSs" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <local:EnumStringConverter x:Key="converter" />
+
+        <Style BasedOn="{StaticResource contentStyle}"
+               TargetType="{x:Type HeaderedContentControl}" x:Key="hiderStyle">
+            <Setter Property="Visibility"
+                    Value="Visible" />
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding DBMS}">
+                            <Condition.Value>
+                                <dataacces:DBMSs>MSSQL</dataacces:DBMSs>
+                            </Condition.Value>
+                        </Condition>
+                        <Condition Binding="{Binding AuthenticationMethod}">
+                            <Condition.Value>
+                                <dataacces:AuthenticationMethod>WindowsAuthentication</dataacces:AuthenticationMethod>
+                            </Condition.Value>
+                        </Condition>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Visibility"
+                            Value="Collapsed" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+    <StackPanel Grid.IsSharedSizeScope="True"
+                Orientation="Vertical">
+
+        <HeaderedContentControl Header="Database System"
+                                Style="{StaticResource contentStyle}">
+            <ComboBox Name="dbmsSelector"
+                      ItemsSource="{Binding Source={StaticResource dbmsDataProvider}}"
+                      SelectedValue="{Binding DBMS}"
+                      SelectionChanged="dbmsSelector_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Path=., Converter={StaticResource converter},Mode=OneWay}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="Authentication Method">
+            <HeaderedContentControl.Style>
+                <Style BasedOn="{StaticResource contentStyle}"
+                       TargetType="{x:Type HeaderedContentControl}">
+                    <Setter Property="Visibility"
+                            Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DBMS}">
+                            <DataTrigger.Value>
+                                <dataacces:DBMSs>MSSQL</dataacces:DBMSs>
+                            </DataTrigger.Value>
+                            <Setter Property="Visibility"
+                                    Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </HeaderedContentControl.Style>
+
+            <ComboBox Name="authenticationTypeSelector"
+                      ItemsSource="{Binding Source={StaticResource authenticationMethodsDataProvider}}"
+                      SelectedValue="{Binding AuthenticationMethod, UpdateSourceTrigger=PropertyChanged, BindsDirectlyToSource=True}"
+                      SelectionChanged="authenticationTypeSelector_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Path=., Converter={StaticResource converter},Mode=OneWay}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="Connection Name"
+                                Content="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        <HeaderedContentControl Header="Host"
+                                Content="{Binding Host,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        <HeaderedContentControl Name="portTextbox"
+                                Header="Port"
+                                Content="{Binding Port,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        <HeaderedContentControl Name="ConnPoolTextbox"
+                                Header="Max connections"
+                                Content="{Binding MaxConnections, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <HeaderedContentControl Header="Database"
+                                Content="{Binding Database,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        <HeaderedContentControl Header="Username"
+                                Style="{StaticResource hiderStyle}">
+            <TextBox Text="{Binding UserName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        </HeaderedContentControl>
+            <HeaderedContentControl Header="Password"
+                                Style="{StaticResource hiderStyle}">
+            <PasswordBox Name="passwordBox"
+                         PasswordChanged="passwordBox_PasswordChanged" />
+        </HeaderedContentControl>
+
+        <Button HorizontalAlignment="Center"
+                Name="buttonTestConnection"
+                Click="buttonTestConnection_Click">_Test connection</Button>
+        <Button HorizontalAlignment="Center"
+                Name="addConnection"
+                Click="addConnection_Click">
+            _Add connection
+        </Button>
+    </StackPanel>
+</Window>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>$table.TableName</title>
+		<link rel="stylesheet" href="../../files/styles.css">
+		<link rel="stylesheet" href="../../files/jquery/themes/flick/jquery.ui.all.css">
+		<script src="../../files/jquery/jquery-1.4.4.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.core.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.tabs.js"></script>
+		<script type="text/javascript" src="../files/jquery/tablesorter/jquery.tablesorter.js"></script> 
+		<script>
+		$(document).ready(function() { 
+				$("#tabs").tabs();
+				$("#all-tables").tablesorter()
+		});
+
+		function toggleMoreLess(link)
+		{
+			if (link.html() == 'more')
+				link.html('less');
+			else
+				link.html('more');
+		}
+		</script>
+	</head>
+	<body>
+
+		<div class="ui-widget">
+					<div class="ui-widget-header" style="text-align: center; margin: 0px;">
+						<h2 style="margin: 0px;">Table '$table.TableName'</h2>
+					</div>
+					<div class="ui-widget-content" style="padding: 10px; overflow: auto;">
+
+						<div class="ui-widget" style="float: left; width: 60%;">
+							<div class="ui-widget-header">
+								Columns
+							</div>
+							<div class="ui-widget-content" style="padding: 10px;">
+								<table id="columns_table" class="generic_table" width="100%">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Data Type</th>
+									<th>Size</th>
+									<th>Nullable</th>
+									<th>Unique</th>
+									<th>Sequence</th>
+									<th>Default</th>
+									#if ($children.Count() != 0 || $parents.Count() != 0)
+									<th>Children</th>
+									<th>Parent</th>
+									#end
+								</tr>
+							</thead>
+							<tbody>
+								#set ($col_id = 0)
+								#foreach($column in $table.Columns)
+									#set ($col_id = $col_id + 1)
+								<tr>
+									<td>
+										#if ($table.PrimaryKey.Columns && $table.PrimaryKey.Columns.Contains($column))
+										<span style="text-decoration: underline;">$column.ColumnName</span>
+										#else
+										$column.ColumnName
+										#end
+									</td>
+									<td>$column.DataType.ToString()</td>
+									<td>
+										$HTMLBuilder.GetColumnSize($column)
+									</td>
+									<td style="text-align: center;">
+										#if ($column.IsNullable)
+											x
+										#else
+											&nbsp;
+										#end
+									</td>
+									<td style="text-align: center;">
+									#if ($column.Unique || ($table.PrimaryKey && $table.PrimaryKey.Columns.Count()==1 && $table.PrimaryKey.Columns.Contains($column)))
+										x
+									#else
+										&nbsp;
+									#end
+									</td>
+									<td style="text-align: center;">
+										#if ($column.IsSequence)
+											x
+										#else
+											&nbsp;
+										#end
+									</td>
+									<td>
+									
+									#if ($column.DefaultValue)
+										#if ($column.DefaultValue == '')
+										<span style="font-style: italic; font-size: 10px;">empty string</span>
+										#else
+										$column.DefaultValue
+										#end
+									#end
+
+									#if ($column.IsNullable && !$column.DefaultValue)
+										Null
+									#end
+
+									</td>
+									#if ($children.Count() != 0 || $parents.Count() != 0)
+										<td>
+											#if ($children.ContainsKey($column))
+												#set ($c = 0)
+												#foreach ($t in $children.get_Item($column))
+													#set ($c = $c + 1)
+													#if ($c == 4)
+														<div id="children_$col_id" style="display: none;">
+													#end
+													$formatter.Format($t)
+													<br/>
+												#end
+												#if ($c >= 4)
+												</div>
+												<div style="text-align: right;">(<a href="javascript:void(0)" onclick="$('#children_$col_id').toggle(); toggleMoreLess($(this))">more</a>)</div>
+												#end
+											#end
+										</td>
+										<td>
+											#if ($parents.ContainsKey($column))
+												$formatter.Format($parents.get_Item($column))
+											#end
+										</td>
+									#end
+								</tr>
+								#end
+							</tbody>
+						</table>
+							</div>
+
+
+
+
+
+
+
+
+
+					</div>
+					
+
+				<div style="float: right; width: 39%;">
+					<div class="ui-widget">
+							<div class="ui-widget-header">
+								Issues
+							</div>
+							<div class="ui-widget-content" style="padding: 10px;">
+<table class="generic_table" width="100%">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Severity</th>
+							</tr>
+						</thead>
+						<tbody>
+							#set( $issue_id = 0 )
+							#foreach($iss in $issues)
+								#set( $issue_id = $issue_id + 1 )
+								<tr>
+									<td>$formatter.Format($iss.Description)
+									
+									#if ($iss.ExtendedDescription)
+									(<a href="javascript: void(0)" onclick="$('#issue_desc_$issue_id').toggle(); toggleMoreLess($(this))">more</a>)
+									<div id="issue_desc_$issue_id" style="display:none;">
+										<br/>
+										$formatter.Format($iss.ExtendedDescription)
+									</div>
+									#end
+									</td>
+
+									<td>
+									$iss.Severity
+									</td>
+								</tr>
+							#end
+
+							#if ($issue_id == 0)
+								<tr>
+									<td colspan="2">
+									No Issues
+									</td>
+								</tr>
+							#end
+						</tbody>
+					</table>
+</td>
+</tr>
+</table>
+							</div>
+			</div>
+
+
+
+
+<div class="ui-widget" style="margin-top: 15px;">
+							<div class="ui-widget-header">
+								Foreign Keys
+							</div>
+							<div class="ui-widget-content" style="padding: 10px;">
+
+							<table class="generic_table" width="100%">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>References</th>
+							</tr>
+						</thead>
+						<tbody>
+							#foreach ($fk in $table.ForeignKeys)
+							<tr>
+								<td>$fk.ForeignKeyName</td>
+								<td>
+								#if ($fk.IsSingleColumn)
+									$fk.FKColumn.ColumnName &rarr; $formatter.Format($fk.PKColumn.Table)
+									.$fk.PKColumn.ColumnName
+								#else
+									#foreach ($colPair in $fk.ColumnPairs)
+										$colPair.FKColumn.ColumnName &rarr; $formatter.Format($colPair.PKColumn.Table)
+										.$colPair.PKColumn.ColumnName <br/>
+									#end
+								#end
+								</td>
+							</tr>
+							#end
+
+							#if ($table.ForeignKeys.Count == 0)
+							<tr>
+								<td colspan="2">No foreign keys</td>
+							</tr>
+							#end
+						</tbody>
+					</table>
+
+
+							</div>
+				</div>
+	
+
+<div class="ui-widget" style="margin-top: 10px;">
+							<div class="ui-widget-header">
+								Indices
+							</div>
+							<div class="ui-widget-content" style="padding: 15px;">
+								<table class="generic_table" width="100%">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Columns</th>
+							</tr>
+						</thead>
+						<tbody>
+							#foreach($index in $table.Indices)
+							<tr>
+								<td>$index.IndexName</td>
+								<td>					
+									#foreach($indexCol in $index.Columns)
+										$indexCol.ColumnName <br/>
+									#end
+								</td>
+							</tr>
+							#end
+
+							#if ($table.Indices.Count == 0)
+							<tr>
+								<td colspan="3">No indices</td>
+							</tr>
+							#end
+						</tbody>
+					</table>
+							</div>
+				</div>
+
+
+					</div>
+			</div>
+
+			
+			
+
+
+
+
+
+	</body>
+</html>

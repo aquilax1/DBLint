@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>DBLint Report</title>
+		<link rel="stylesheet" href="../../files/styles.css">
+		<link rel="stylesheet" href="../../files/jquery/themes/flick/jquery.ui.all.css">
+		<script src="../../files/jquery/jquery-1.4.4.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.core.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.tabs.js"></script>
+		<script type="text/javascript" src="../../files/jquery/tablesorter/jquery.tablesorter.js"></script> 
+	</head>
+<body style="margin: 0px;">
+
+
+<div class="ui-widget">
+						<div class="ui-widget-header">
+								Tables
+							</div>
+							<div class="ui-widget-content" style="padding: 15px;">
+						
+								<table class="generic_table" width="100%">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Status</th>
+										<th>Score</th>
+									</tr>
+								</thead>
+								<tbody>
+									#foreach($tableDiff in $diff.Tables)
+										<tr>
+											<td>
+												$HTMLBuilder.FormatTableID($tableDiff.TableID)
+											</td>
+											<td>$tableDiff.Status</td>
+											<td>
+												#if ($tableDiff.Status.ToString() != "Removed")
+												$tableDiff.NewScore
+												#else
+												-
+												#end
+
+												#if($tableDiff.Status.ToString() == "Changed")
+													#set ($scoreDiff = $tableDiff.NewScore - $tableDiff.OldScore)
+													
+													($scoreDiff
+													#if($scoreDiff > 0)
+														&uarr;
+													#else
+														&darr;
+													#end)
+												#end
+											</td>
+												
+										</tr>
+									#end
+
+									#if ($diff.Tables.Count() == 0)
+									<tr>
+										<td colspan="3">No changed tables since last run</td>
+									</tr>
+									#end
+								</tbody>
+								</table>
+							</div>
+						</div>
+						<br/>
+						<div class="ui-widget">
+							<div class="ui-widget-header">
+								Issues
+							</div>
+							<div class="ui-widget-content" style="padding: 15px;">
+						
+								<table class="generic_table" width="100%">
+								<thead>
+									<tr>
+										<th>Issue Type</th>
+										<th>Table</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									#foreach($issueDiff in $diff.Issues)
+										<tr>
+											<td valign="top">$issueDiff.Issue.IssueName</td>
+											<td>
+												#foreach ($tableID in $issueDiff.Tables)
+													$HTMLBuilder.FormatTableID($tableID)
+													<br/>
+												#end
+											</td>
+											<td valign="top">
+												$issueDiff.Status
+											</td>
+										</tr>
+									#end
+								</tbody>
+								</table>
+							</div>
+						</div>
+</body>
+</html>

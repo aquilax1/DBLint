@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>DBLint Report</title>
+		<link rel="stylesheet" href="../../files/styles.css">
+		<link rel="stylesheet" href="../../files/jquery/themes/flick/jquery.ui.all.css">
+		<script src="../../files/jquery/jquery-1.4.4.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.core.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="../../files/jquery/ui/jquery.ui.tabs.js"></script>
+		<script type="text/javascript" src="../../files/jquery/tablesorter/jquery.tablesorter.js"></script> 
+		<script>
+function toggleMoreLess(link)
+		{
+			if (link.html() == 'more')
+				link.html('less');
+			else
+				link.html('more');
+		}
+</script>
+	</head>
+<body style="margin: 0px;">
+
+
+					<table class="generic_table" width="100%">
+						<thead>
+							<tr>
+								<th>Description</th>
+								<th>Table(s)</th>
+							</tr>
+						</thead>
+						<tbody>
+							#set( $issue_id = 0 )
+							#foreach($issue in $groupIssues)
+							#set( $issue_id = $issue_id + 1 )
+							<tr>
+								<td valign="top">$formatter.Format($issue.Description)
+								
+								#if ($issue.ExtendedDescription)
+								(<a href="javascript: void(0)" onclick="$('#issue_desc_$issue_id').toggle(); toggleMoreLess($(this))">more</a>)
+								<div id="issue_desc_$issue_id" style="display:none;">
+									<br/>
+									$formatter.Format($issue.ExtendedDescription)
+								</div>
+								#end
+								</td>
+
+								<td valign="top" class="context_column">
+								#if($issue.Context)
+								$HTMLBuilder.IssueContextToHTML($issue.Context)
+								#end
+								</td>
+							</tr>
+							#end
+						</tbody>
+					</table>
+	</body>
+</html>

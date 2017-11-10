@@ -1,0 +1,76 @@
+﻿<Window x:Class="DBLint.DBLintGui.ConfigureRule"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:DBLint.DBLintGui"
+        Height="300"
+        Width="500"
+        KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="Focusable"
+                    Value="False" />
+        </Style>
+        <local:EnumStringConverter x:Key="converter" />
+        <DataTemplate x:Key="stringTemplate">
+            <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+        </DataTemplate>
+        <DataTemplate x:Key="SQLTemplate">
+            <TextBox AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  Height="200" Width="500" />
+        </DataTemplate>
+        <DataTemplate x:Key="boolTemplate">
+            <CheckBox IsChecked="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+        </DataTemplate>
+        <DataTemplate x:Key="enumsTemplate">
+            <ComboBox SelectedValue="{Binding Path=ValueDirect}"
+                      ItemsSource="{Binding Path=Values}" />
+        </DataTemplate>
+    </Window.Resources>
+    <DockPanel>
+        <Button DockPanel.Dock="Bottom"
+                Content="_Close"
+                Name="CloseButton"
+                Click="CloseButton_Click" />
+        <ListView ItemsSource="{Binding}"
+                  Width="Auto"
+                  SelectionMode="Single"
+                  Name="ItemsView">
+            <ListView.View>
+                <GridView x:Name="OptionGridView">
+                    <GridViewColumn Header="Option"
+                                    x:Name="OptionColumn">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Expander Header="{Binding Name}"
+                                          HorizontalAlignment="Stretch">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Description}"
+                                                   ToolTip="{Binding Description}"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Expander>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Value"
+                                    Width="150"
+                                    x:Name="ValueColumn">
+
+                    </GridViewColumn>
+                    <GridViewColumn Header=""
+                                    Width="100"
+                                    x:Name="ResetColumn">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Reset" Name="ResetButton" Click="ResetButton_Click"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </DockPanel>
+</Window>

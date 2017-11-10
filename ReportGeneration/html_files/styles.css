@@ -1,0 +1,114 @@
+body
+{
+	font-size: 12px;
+	margin: 25px;
+	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+}
+
+h2
+{
+	margin-bottom: 7px;
+}
+
+#main_title
+{
+	text-align: center;
+}
+
+a 
+{
+	text-decoration: none;
+	color: #0073ea;
+}
+
+a:visited
+{
+	color: #0073ea;
+}
+
+#scorebox
+{
+	border: solid 1px;
+	width: 75px;
+	text-align: center;
+	border-color: gray;
+	float: right;
+	margin-right: 15px;
+	margin-top: 10px;
+	padding: 7px;
+}
+
+#scorevalue
+{
+	font-size: 35px;	
+}
+
+#stats_container
+{
+	overflow: auto;
+	padding: 5px;
+}
+
+#stat_table
+{
+	float: left;
+}
+
+#issues_summary
+{
+	width: 100%;
+}
+
+#bottom_tables 
+{
+	width: 100%;
+}
+
+.generic_table
+{
+	border-collapse: collapse;
+}
+
+.generic_table a
+{
+	text-decoration: none;
+}
+
+.generic_table td
+{
+	border: solid 1px;
+	border-color: #e2e2e2;
+	padding: 4px;
+}
+
+.generic_table th
+{
+	background-color: #f2f2f2;
+	border: solid 1px;
+	border-color: #e2e2e2;
+	padding: 2px;
+}
+
+#context_column
+{
+	white-space: nowrap;
+}
+
+.sortable-table th
+{
+	background-image: url(jquery/tablesorter/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+	padding-right: 19px;
+}
+
+th.headerSortDown { 
+    background-image: url(jquery/tablesorter/desc.gif); 
+    background-color: #e2e2e2; 
+}
+
+th.headerSortUp { 
+    background-image: url(jquery/tablesorter/asc.gif); 
+    background-color: #e2e2e2; 
+}

@@ -1,0 +1,25 @@
+## Template for tables in issue descriptions
+
+<table class="generic_table">
+<thead>
+	<tr>
+	#foreach($col in $table.Columns)
+		<th>$col.ColumnName</th>
+	#end
+	</tr>
+</thead>
+<tbody>
+#foreach($row in $table.Rows)
+	<tr>
+		#set( $i = 0 )
+		#foreach($cell in $row.ItemArray)
+		<td>
+		#if($cell && "$cell" != "")
+			$formatter.FormatWrapper($cell)
+		#end
+		</td>
+		#end
+	</tr>
+#end
+</tbody>
+</table>

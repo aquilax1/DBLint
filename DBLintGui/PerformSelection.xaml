@@ -1,0 +1,110 @@
+﻿<local:ValidStateUserControl x:Class="DBLint.DBLintGui.PerformSelection"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                             xmlns:local="clr-namespace:DBLint.DBLintGui"
+                             xmlns:System="clr-namespace:System;assembly=mscorlib"
+                             mc:Ignorable="d"
+                             d:DesignHeight="300"
+                             d:DesignWidth="700"
+                             DataContextChanged="ValidStateUserControl_DataContextChanged">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Schemas">
+            <ListView ItemsSource="{Binding Schemas}"
+                      SelectionMode="Single"
+                      Name="schemaSelection">
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type local:Schema}">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Name="IncludeSchema"
+                                      IsChecked="{Binding Include}"
+                                      Margin="0,2,0,0"
+                                      Checked="IncludeSchema_Checked"
+                                      Indeterminate="IncludeSchema_Indeterminate"
+                                      Unchecked="IncludeSchema_Unchecked">
+                            </CheckBox>
+                            <TextBlock Text="{Binding Name}"
+                                       Margin="5,1,0,1"
+                                       Mouse.MouseDown="TextBlock_MouseDown" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+            </ListView>
+        </GroupBox>
+
+        <GroupBox Header="Tables"
+                  Grid.Column="1">
+            <DockPanel>
+                <DockPanel.Resources>
+                    <x:Array x:Key="emptyString"
+                             Type="{x:Type System:String}">
+                        <System:String>No tables in schema</System:String>
+                    </x:Array>
+
+                </DockPanel.Resources>
+                <DockPanel DockPanel.Dock="Bottom"
+                           Grid.Column="1"
+                           Grid.Row="1">
+                    <DockPanel.Resources>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Width"
+                                    Value="75" />
+                            <EventSetter Event="Click"
+                                         Handler="ChangeSelection_Click" />
+                        </Style>
+                    </DockPanel.Resources>
+                    <Button DockPanel.Dock="Left"
+                            Name="SelectMatches"
+                            Content="Select" />
+                    <Button DockPanel.Dock="Left"
+                            Name="DeselectMatches"
+                            Content="Deselect" />
+                    <TextBox Name="Regex"
+                             TextChanged="Regex_TextChanged">.*</TextBox>
+                </DockPanel>
+                <ListView Name="tableSelection"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          Grid.IsSharedSizeScope="True"
+                          ItemsSource="{Binding .,TargetNullValue={StaticResource emptyString}}">
+
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel  Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+
+                    <ListView.Resources>
+                        <DataTemplate DataType="{x:Type local:Table}">
+                            <Grid Grid.IsSharedSizeScope="False">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="A" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox IsChecked="{Binding Include, Mode=TwoWay}"
+                                          Name="includeTable"
+                                          Click="includeTable_Click"
+                                          Foreground="{Binding Color}"
+                                          OverridesDefaultStyle="True"
+                                          Template="{StaticResource noAnimationControlTemplate}">
+                                    <TextBlock Text="{Binding Name}" />
+                                </CheckBox>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.Resources>
+                </ListView>
+
+            </DockPanel>
+        </GroupBox>
+
+    </Grid>
+</local:ValidStateUserControl>

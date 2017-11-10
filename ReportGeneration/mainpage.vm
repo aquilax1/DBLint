@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>$db.DatabaseName</title>
+		<link rel="stylesheet" href="../files/styles.css">
+		<link rel="stylesheet" href="../files/jquery/themes/flick/jquery.ui.all.css">
+		<script src="../files/jquery/jquery-1.4.4.js"></script>
+		<script src="../files/jquery/ui/jquery.ui.core.js"></script>
+		<script src="../files/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="../files/jquery/ui/jquery.ui.tabs.js"></script>
+		<script type="text/javascript" src="../files/jquery/tablesorter/jquery.tablesorter.js"></script> 
+		<script type="text/javascript" src="../files/scripts.js"></script>
+	</head>
+<body>
+	<h1 id="main_title">$db.DatabaseName Report</h1>
+	<div id="tabs">
+			<ul>
+				<li><a href="#tabs-home">Summary</a></li>
+				<li><a href="#tabs-issues">Issues</a></li>
+				<li><a href="#tabs-tables">Tables</a></li>	
+				<li><a href="#tabs-rules">Rules</a></li>	
+				<li><a href="#tabs-incremental">Incremental</a></li>
+			</ul>
+			<div id="tabs-home">
+				
+				<div class="ui-widget">
+					<div class="ui-widget-header">
+						Statistics
+					</div>
+					<div class="ui-widget-content" id="stats_container">
+						<table id="stat_table">
+							<tr>
+								<td style="width: 175px;">Time spent on analysis:</td>
+								<td>$executionTime</td>
+							</tr>
+							<tr>
+								<td>Tables analyzed:</td>
+								<td>$tables.Count</td>
+							</tr>
+							<tr>
+								<td>Issues Total:</td>
+								<td>$issuesTotal</td>
+							</tr>
+							<tr>
+								<td>Rules Executed:</td>
+								<td>$rulesExecuted</td>
+							</tr>
+							<tr>
+								<td>Rule types:</td>
+								<td>$ruleTypes</td>
+							</tr>
+						</table>
+
+						<div id="scorebox">
+							<div id="scorevalue">$totalScore%</div>
+							<div style="font-size: 10px;">
+							#if ($totalScore >= 80)
+								Excellent
+							#elseif ($totalScore >= 60)
+								Above Average
+							#elseif ($totalScore >= 40)
+								Average
+							#elseif ($totalScore >= 20)
+								Below Average
+							#else
+								Bad
+							#end
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+
+				<div class="ui-widget">
+					<div class="ui-widget-header">
+						Issues Overview
+					</div>
+					<div class="ui-widget-content" id="stats_container" style="padding: 15px;">
+						<table id="issues_summary" class="generic_table sortable-table">
+							<thead>
+								<tr>
+									<th>Issue Name</th>
+									<th>Severity</th>
+								</tr>
+							</thead>
+							<tbody>
+								#foreach($issueGroup in $issueGroups)
+									<tr>
+									<td><a href="#" onclick="show_issue_tab($issueGroup.GroupID)">$issueGroup.Name ($issueGroup.Count)</a></td>
+									<td> $issueGroup.Severity </td>
+								</tr>
+								#end
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<br/>
+				<div class="ui-widget">
+					<div class="ui-widget-header">
+						Lowest-scoring tables
+					</div>
+					<div class="ui-widget-content" id="stats_container" style="padding: 15px;">
+						
+						<table id="bottom_tables" class="generic_table">
+							<thead>
+								<tr>
+									<th>Table Name</th>
+									<th width="15%">Issues</th>
+									<th width="15%">Score</th>
+								</tr>
+							</thead>
+							<tbody>
+								#foreach($table in $bottomTables)
+								<tr>
+									<td>$formatter.Format($table.Table)</td>
+									<td>$table.IssueCount</td>
+									<td>$table.Score</td>
+								</tr>
+								#end
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+
+			<div id="tabs-tables">
+				
+
+						<table id="all-tables" class="generic_table sortable-table">
+							<thead>
+								<tr>
+									<th>Table Name</th>
+									<th width="100">Issues</th>
+									<th width="100">Score</th>
+									<th width="120">Importance</th>
+								</tr>
+							</thead>
+							<tbody>
+								#foreach($table in $tables)
+								<tr>
+									<td>$formatter.Format($table.Table)</td>
+									<td>$table.IssueCount</td>
+									<td>$table.Score</td>
+									<td>$table.Importance.ToString().Replace(',','.')</td>
+								</tr>
+								#end
+							</tbody>
+						</table>
+
+
+
+			</div>
+			<div id="tabs-issues">
+				<div style="overflow: auto">
+					<table id="issues-summary" class="generic_table" style="width: 25%; float: left;">
+						<thead>
+							<tr>
+								<th>Issues</th>
+							</tr>
+						</thead>
+						<tbody>
+							#foreach($sevGroup in $severityGroups)
+							<tr>
+								<td>$sevGroup.Severity</td>
+							</tr>
+							#foreach($issueGroup in $sevGroup.IssueGroups)
+							<tr>
+								<td style="padding-left: 20px;">
+								<a href="#" onclick="show_issue_list($issueGroup.GroupID)">$issueGroup.Name ($issueGroup.Count)
+								</a></td>
+							</tr>
+							#end
+							#end
+						</tbody>
+					</table>
+					
+					<iframe frameborder="0" id="issueFrame" style="float: right; width: 70%;"></iframe>
+				</div>
+			</div>
+
+			<div id="tabs-rules">
+				<div style="overflow: auto">
+					<table id="rule_table" class="generic_table sortable-table" style="width: 50%">
+						<thead>
+							<tr>
+								<th>Rule Name</th>
+								<th>Severity</th>
+								<th>Passed</th>
+								<th>Issues</th>
+							</tr>
+						</thead>
+						<tbody>
+							#foreach ($summary in $summaries.RuleSummaries)
+							<tr>
+								<td>$summary.Rule.Name</td>
+								<td>$summary.Rule.DefaultSeverity.Value.ToString()</td>
+								<td align="center">
+								#if ($summary.Status.ToString() == 'Failed')
+									<img width="15" src="../files/warning.gif" />
+								#elseif ($summary.Issues.Count() == 0)
+									<img width="15" src="../files/success.gif" />
+								#elseif ($summary.Issues.Count() > 0)
+									<img width="15" src="../files/failure.gif" />
+								#end
+								</td>
+								<td>
+									$summary.Issues.Count()
+								</td>
+							</tr>
+							#end
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div id="tabs-incremental">
+				<div style="overflow: auto">
+					<table id="incremental_runs" class="generic_table" style="width: 25%; float: left;">
+						<thead>
+							<tr>
+								<th>Runs</th>
+							</tr>
+						</thead>
+						<tbody>
+							#set( $diff_id = 0 )
+							#foreach($diff in $diffs)
+								#set( $diff_id = $diff_id + 1 )
+							<tr>
+								<td>
+									#set( $changes = $diff.Tables.Count() + $diff.Issues.Count() )
+									#if ($changes > 0)
+									<a href="#" onclick="show_diff('$diff_id')">$diff.NewRun.Timestamp.ToString()</a> &nbsp; ($changes)
+									#else
+									$diff.NewRun.Timestamp.ToString() &nbsp; (0)
+									#end
+								</td>
+							</tr>
+							#end
+							
+							#if ($diffs.Count == 0)
+							<tr>
+								<td style="font-style: italic;">DBLint has only been executed once on this database</td>
+							</tr>
+							#end
+						</tbody>
+					</table>
+					<iframe frameborder="0" id="incrementFrame" style="float: right; width: 70%;"></iframe>
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html>

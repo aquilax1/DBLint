@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C3500F5D-2655-4434-B655-84D1E35DD029}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBLint.Rules</RootNamespace>
+    <AssemblyName>Rules</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataRules\AllValuesDefault.cs" />
+    <Compile Include="DataRules\AllValuesDifferFromDefault.cs" />
+    <Compile Include="DataRules\Classifier.cs" />
+    <Compile Include="DataRules\ColumnsOneValue.cs" />
+    <Compile Include="DataRules\CommaSeparatedLists.cs" />
+    <Compile Include="DataRules\DetectOutlierData.cs" />
+    <Compile Include="DataRules\ConsistentCasing.cs" />
+    <Compile Include="DataRules\DatatypeMixture.cs" />
+    <Compile Include="DataRules\DuplicationRows.cs" />
+    <Compile Include="DataRules\EliminationRelationalTables.cs" />
+    <Compile Include="DataRules\EnumSuggestion.cs" />
+    <Compile Include="DataRules\InformationContent.cs" />
+    <Compile Include="DataRules\LargeVarchar.cs" />
+    <Compile Include="DataRules\MissingNotNullConstraint.cs" />
+    <Compile Include="DataRules\NoEmptyTable.cs" />
+    <Compile Include="DataRules\NotNullAllBlank.cs" />
+    <Compile Include="DataRules\NumberDateInVarchar.cs" />
+    <Compile Include="DataRules\RedundantColumns.cs" />
+    <Compile Include="DataRules\SuperkeyDetection.cs" />
+    <Compile Include="DataRules\TableDataImportance.cs" />
+    <Compile Include="DataRules\TooManyNullFields.cs" />
+    <Compile Include="DataRules\WrongBooleanRepresentation.cs" />
+    <Compile Include="Naming\Trie.cs" />
+    <Compile Include="Naming\TrieNameDetector.cs" />
+    <Compile Include="Naming\TrieUtils.cs" />
+    <Compile Include="OutlierDetection\DateVector.cs" />
+    <Compile Include="OutlierDetection\NumberVector.cs" />
+    <Compile Include="OutlierDetection\OutlierAnalysis.cs" />
+    <Compile Include="OutlierDetection\OutlierData.cs" />
+    <Compile Include="OutlierDetection\TextVector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SchemaProviders\ImportanceProvider.cs" />
+    <Compile Include="SchemaProviders\PageRank.cs" />
+    <Compile Include="SchemaRules\CompositePrimaryKeys.cs" />
+    <Compile Include="SchemaRules\CyclesBetweenTables.cs" />
+    <Compile Include="SchemaRules\DeviantVarcharLength.cs" />
+    <Compile Include="SchemaRules\ForeignKeyFromPrimaryKeyToSelf.cs" />
+    <Compile Include="SchemaRules\ForeignKeyRefColumnDataType.cs" />
+    <Compile Include="SchemaRules\ForeignKeyWithoutIndex.cs" />
+    <Compile Include="SchemaRules\InconsistentColumnGroupDatatypes.cs" />
+    <Compile Include="SchemaRules\InconsistentNamingWeighted.cs" />
+    <Compile Include="SchemaRules\LongCharInappropiateDefault.cs" />
+    <Compile Include="SchemaRules\MissingColInSequence.cs" />
+    <Compile Include="SchemaRules\MissingPrimaryKey.cs" />
+    <Compile Include="Naming\MarkovConventionDetector.cs" />
+    <Compile Include="Naming\MarkovTokenGraph.cs" />
+    <Compile Include="Naming\INameConventionDetector.cs" />
+    <Compile Include="Naming\MarkovEdge.cs" />
+    <Compile Include="Naming\Tokenizer.cs" />
+    <Compile Include="Naming\Tokens.cs" />
+    <Compile Include="SchemaRules\NullableAndUnique.cs" />
+    <Compile Include="SchemaRules\PrimaryAndUniqueColumnsMatch.cs" />
+    <Compile Include="SchemaRules\PrimaryKeyFirst.cs" />
+    <Compile Include="SchemaRules\RedundantForeignKeys.cs" />
+    <Compile Include="SchemaRules\RedundantIndices.cs" />
+    <Compile Include="SchemaRules\ReservedWords.cs" />
+    <Compile Include="SchemaRules\SpecialCharacters.cs" />
+    <Compile Include="SchemaRules\SameNameDifferentDatatypes.cs" />
+    <Compile Include="SchemaRules\TableIslands.cs" />
+    <Compile Include="SchemaRules\TablesWithZeroColumns.cs" />
+    <Compile Include="SchemaRules\TooLargeVarchar.cs" />
+    <Compile Include="SchemaRules\TooLongColumnNames.cs" />
+    <Compile Include="SchemaRules\TooShortColumnName.cs" />
+    <Compile Include="SchemaRules\VarcharsWithZeroLength.cs" />
+    <Compile Include="SchemaRules\WrongUseOfTextColumns.cs" />
+    <Compile Include="SchemaRules\TooBigIndex.cs" />
+    <Compile Include="SchemaRules\TooManyNulls.cs" />
+    <Compile Include="TestDataRules.cs" />
+    <Compile Include="Utils\ITableImportance.cs" />
+    <Compile Include="Utils\MarkovChain.cs" />
+    <Compile Include="Utils\RTree\INode.cs" />
+    <Compile Include="Utils\RTree\Node.cs" />
+    <Compile Include="Utils\RTree\Point.cs" />
+    <Compile Include="Utils\RTree\Rectangle.cs" />
+    <Compile Include="Utils\RTree\RTree.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{7EE6FF70-E5E9-4600-8A0C-C81B95BB6B3F}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataTypes\DataTypes.csproj">
+      <Project>{5E938DAD-59AC-4A4B-A3E4-F0B64AC1DE8E}</Project>
+      <Name>DataTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{6C9935C2-524B-42EA-A672-AA4C605B34FD}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RuleControl\RuleControl.csproj">
+      <Project>{0EF02163-C0BA-4568-A443-ABA81946BE9A}</Project>
+      <Name>RuleControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ReservedWordsSQL92.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ReservedWordsSQL99.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataProviders\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

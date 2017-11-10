@@ -1,0 +1,66 @@
+﻿<local:ValidStateUserControl x:Class="DBLint.DBLintGui.ExecuteDBLint"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                             xmlns:local="clr-namespace:DBLint.DBLintGui"
+                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                             xmlns:System="clr-namespace:System;assembly=mscorlib"
+                             mc:Ignorable="d"
+                             d:DesignHeight="300"
+                             d:DesignWidth="300">
+    <UserControl.Resources>
+        <x:Array x:Key="defaultText"
+                 Type="{x:Type System:String}">
+            <System:String>test</System:String>
+            <System:String>wow</System:String>
+            <System:String>wow</System:String>
+            <System:String>wow</System:String>
+            <System:String>wow</System:String>
+            <System:String>wow</System:String>
+            <System:String>wow</System:String>
+        </x:Array>
+        <Style TargetType="{x:Type HeaderedContentControl}"
+               BasedOn="{StaticResource contentStyle}" />
+    </UserControl.Resources>
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Name="infoView">
+            <HeaderedContentControl Header="Progress">
+                <ProgressBar Name="progressBar"
+                             Maximum="{Binding TotalWork}"
+                             Minimum="0"
+                             Value="{Binding WorkDone}" />
+            </HeaderedContentControl>
+            <HeaderedContentControl Header="Issues found">
+                <Label Content="{Binding FoundIssues}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="Total tables">
+                <Label Content="{Binding TotalTables}" />
+            </HeaderedContentControl>
+        </StackPanel>
+        <GroupBox Grid.Row="1"
+                  Header="Info">
+            <ListView ItemsSource="{Binding}"
+                      d:DataContext="{StaticResource defaultText}"
+                      Name="logviewer">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Value}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </GroupBox>
+       <Button IsEnabled="False"
+                Content="Send Report"
+                Grid.Row="2"
+                Name="SendButton"
+                Click="SendButton_Click" Visibility="Collapsed" />
+    </Grid>
+</local:ValidStateUserControl>

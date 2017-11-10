@@ -1,0 +1,69 @@
+﻿<DBLintGui:ValidStateUserControl x:Class="DBLint.DBLintGui.SelectConnection"
+                                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                 xmlns:DBLintGui="clr-namespace:DBLint.DBLintGui"
+                                 xmlns:dataAccess="clr-namespace:DBLint.DataAccess;assembly=DataAccess"
+                                 mc:Ignorable="d"
+                                 d:DesignHeight="50"
+                                 d:DesignWidth="600">
+    <DBLintGui:ValidStateUserControl.Resources>
+        <DBLintGui:EnumStringConverter x:Key="converter" />
+    </DBLintGui:ValidStateUserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="0" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1"
+                    Grid.IsSharedSizeScope="True"
+                    Height="Auto">
+
+            <Grid Height="Auto"
+                  Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto"
+                                      SharedSizeGroup="A" />
+                    <ColumnDefinition Width="Auto"
+                                      SharedSizeGroup="A" />
+                    <ColumnDefinition Width="Auto"
+                                      SharedSizeGroup="A" />
+                </Grid.ColumnDefinitions>
+                <HeaderedContentControl Header="Select connection"
+                                        Style="{StaticResource contentStyle}">
+                    <ComboBox IsSynchronizedWithCurrentItem="False"
+                              Name="comboConnections"
+                              ItemsSource="{Binding Connections}"
+                              SelectionChanged="comboConnections_SelectionChanged"
+                              SelectedValue="{Binding LastConnection}"
+                              Loaded="comboConnections_Loaded"
+                              Grid.IsSharedSizeScope="True">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type dataAccess:Connection}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold"
+                                               Text="{Binding Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </HeaderedContentControl>
+                <Button Grid.Column="1"
+                        Name="editConnection"
+                        Click="editConnection_Click"
+                        Content="Edit Selected Connection" />
+                <Button Grid.Column="2"
+                        Name="deleteConnection"
+                        Click="deleteConnection_Click"
+                        Content="Delete Selected Connection" />
+                <Button Grid.Column="3"
+                        Name="addNewConnection"
+                        Click="addNewConnection_Click"
+                        Content="Create New Connection" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</DBLintGui:ValidStateUserControl>
